@@ -17,7 +17,7 @@ jQuery(function() {
 			}
 		} else {
 			var p = jQuery('<p>'+event.key+' : 0</p>');
-			p.addClass('animated bounceInRight').;
+			p.addClass('animated bounceInRight');
 			clicked[event.keyCode] = [0, p];
 			main.append(p);
 		}
