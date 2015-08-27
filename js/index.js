@@ -39,21 +39,21 @@ jQuery(function() {
 		'no4' : jQuery('#cat-4>img').first(),
 	};
 	var msg =  {
-		'press_again' : jQuery('<h3>Press this selection and the key again to use this cat to play game</h3>'),
+		'press_again' : jQuery('<div>Press this selection and the key again to use this cat to play game</div>'),
 		'selected' : function(ary){
-				return jQuery('<h3>cat-' + ary[1] + 'is selected by Key:'+ String.fromCharCode(ary[0]) +'</h3>');
+				return jQuery('<div>cat-' + ary[1] + 'is selected by Key:'+ String.fromCharCode(ary[0]) +'</div>');
 		},
-		'keyused' : jQuery('<h3>This key is already in used</h3>'),
+		'keyused' : jQuery('<div>This key is already in used</div>'),
 	};
-	var playerss = [];
-	var playerss_cnt = 0;
+	var playone;
+	var players = [];
+	var players_cnt = 0;
 	function $catid(select) {
 		return jQuery('#cat-' + select);
 	}
 	function $catimg(select) {
 		return jQuery('#cat-' + select + '>img').first();
 	}
-	var selected_tag = jQuery('<h3>select</h3>'); 
 	var arrow = jQuery('<img src="img/up_arrow.png">');
 	// init arrow
 	arrow.appendTo($catid(select));
@@ -87,33 +87,32 @@ jQuery(function() {
 			jQuery('#register').modal('show');
 		} else 
 		if ( event.keyCode > 32 ) {
-			if (playone) {
-				if (playone[] == event.keyCode && playone[1] == select) {
-					var keyuse = false;
-					if (players)
+			if ( playone && 
+				playone[0] == event.keyCode && 
+				playone[1] == select) {
+				msg['press_again'].remove();
+				var keyuse = false;
+				if (players) {
 					for (var i = 0; i < players.length; i++) {
 						if (event.keyCode == players[i][0]) {
 							keyuse = true;
 							break;
 						}
-					};
-					if (keyuse) {
-						msg.keyused.prependTo($catid(select))
-						return;
-					}
-					msg.press_again.remove();
-					msg.selected(players[players_cnt]).prependTo($catid(select));
-					players_cnt++;
-					console.log(players);
+				}	
 				}
-				else {
-					players[players_cnt] = [event.keyCode, select];
-					msg.press_again.prependTo($catid(select));
+				if (keyuse) {
+					msg['keyused'].prependTo($catid(select));
+					return;
 				}
+				players[players_cnt] = playone;
+				msg['selected'](players[players_cnt]).prependTo($catid(select));
+				players_cnt++;
+				console.log(players);
 			}
 			else {
-				var playone = [event.keyCode, select];
-				msg.press_again.prependTo($catid(select));
+				playone = [event.keyCode, select];
+				msg['press_again'].prependTo($catid(playone[1]));
+				msg['keyused'].remove();
 			}
 		}
 		else {
