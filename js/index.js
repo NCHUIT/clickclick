@@ -38,25 +38,25 @@ jQuery(function() {
 			'obj' : jQuery('<img src="img/cat-1-0.png" class="img-circle"/>'),
 			'key' : 0,
 			'numclick' : 0,
-			'imgloop' : 1,
+			'imgloop' : 0,
 		},
 		{
 			'obj' : jQuery('<img src="img/cat-2-0.png" class="img-circle"/>'),
 			'key' : 0,
 			'numclick' : 0,
-			'imgloop' : 1,
+			'imgloop' : 0,
 		},
 		{
 			'obj' : jQuery('<img src="img/cat-3-0.png" class="img-circle"/>'),
 			'key' : 0,
 			'numclick' : 0,
-			'imgloop' : 1,
+			'imgloop' : 0,
 		},
 		{
 			'obj': jQuery('<img src="img/cat-4-0.png" class="img-circle"/>'),
 			'key' : 0,
 			'numclick' : 0,
-			'imgloop' : 1,
+			'imgloop' : 0,
 		}
 		
 		
@@ -136,7 +136,7 @@ jQuery(function() {
 			console.log(event);
 		}
 	});
-	
+
 	function $sel_cat_background(select) {
 		return jQuery(scope + ' #cat-background-' + select);
 	};
@@ -155,7 +155,28 @@ jQuery(function() {
 					$cat_num_click(i).text(cats[i].numclick);
 				}
 			};
+			jQuery('#game_start').focus();
 		});
 	});
-	jQuery('#game-start')
+	function imgsrc(select, loop) {
+		return 'img/cat-' + select + '-' + loop + '.png'
+	}
+	jQuery('#game_start').keyup(function(event) {
+		for (var i = 1; i < cats.length; i++) {
+		 	if (event.keyCode == cats[i].key) {
+		 		cats[i].numclick++;
+				cats[i].imgloop++;
+				if(cats[i].imgloop >3) cats[i].imgloop=0;
+				cats[i].obj.attr('src', imgsrc(i,cats[i].imgloop));
+				$cat_num_click(i).text(cats[i].numclick);
+				if ( cats[i].numclick == 100) {
+					cats[i].obj.css({
+						'width': '600px',
+					});
+					$cat_num_click(i).remove();
+					jQuery('#game_start').unbind('keyup');
+				}
+		 	}
+		 };
+	});
 });
