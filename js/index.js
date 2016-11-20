@@ -31,6 +31,7 @@
 // });
 
 jQuery(function() {
+	$('#welcome_Modal').modal('show')
 	var select = 1;
 	var cats = [
 		'', // this is to let cats start by 1
